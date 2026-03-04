@@ -91,14 +91,16 @@ async def lifespan(app: FastAPI):
     logger.info("Starting up...")
 
     # Initialize Supabase connection pool
-    try:
-        from .core.supabase_connection_pool import supabase_pool
-
-        await supabase_pool.initialize()
-        logger.info("✅ Supabase connection pool initialized")
-    except Exception as e:
-        logger.error(f"❌ Supabase connection pool initialization failed: {e}")
-        # Continue startup - fallback to direct connections
+    supabase_url = os.getenv("SUPABASE_URL", "")
+    if supabase_url:
+        try:
+            from .core.supabase_connection_pool import supabase_pool
+            await supabase_pool.initialize()
+            logger.info("✅ Supabase connection pool initialized")
+        except Exception as e:
+            logger.error(f"❌ Supabase connection pool initialization failed: {e}")
+    else:
+        logger.info("ℹ️ No SUPABASE_URL set - skipping Supabase pool, using local DB")
 
     # Initialize Redis connection with timeout
     try:
