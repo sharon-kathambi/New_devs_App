@@ -98,7 +98,7 @@ async def calculate_total_revenue(property_id: str, tenant_id: str) -> Dict[str,
             'prop-004': {'total': '1776.50', 'count': 4},
             'prop-005': {'total': '3256.00', 'count': 3}
         }
-        
+
         mock_property_data = mock_data.get(property_id, {'total': '0.00', 'count': 0})
         
         return {
